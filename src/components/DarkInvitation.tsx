@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState, type FormEvent, type PointerEvent, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import { wedding as w } from "@/lib/wedding";
 
 function Ornament() { return <div className="ornament" aria-hidden="true"><span /><svg viewBox="0 0 100 28"><path d="M0 14Q20 14 25 9Q30 1 37 9Q42 18 48 14Q40 9 45 4Q50-2 55 4Q60 9 52 14Q58 18 63 9Q70 1 75 9Q80 14 100 14M50 14Q38 19 44 24Q50 29 50 14Q50 29 56 24Q62 19 50 14" fill="none" stroke="currentColor" strokeWidth="1" /></svg><span /></div>; }
@@ -80,46 +80,6 @@ function SaveDate({ urdu }: { urdu: boolean }) {
     return <div className="save-date"><button className="gold-button" onClick={() => setOpen(!open)} aria-expanded={open}>♧ {urdu ? 'تاریخ محفوظ کریں' : 'SAVE THE DATE'}</button>{open && <div className="calendar-menu"><a href={google} target="_blank" rel="noreferrer">Google Calendar ↗</a><button onClick={download}>Apple / Outlook Calendar ↓</button></div>}</div>;
 }
 function Countdown({ urdu }: { urdu: boolean }) { const [values, setValues] = useState([0, 0, 0, 0]); useEffect(() => { function tick() { const d = Math.max(0, new Date(w.date).getTime() - Date.now()); setValues([Math.floor(d / 86400000), Math.floor(d / 3600000) % 24, Math.floor(d / 60000) % 60, Math.floor(d / 1000) % 60]); } tick(); const id = setInterval(tick, 1000); return () => clearInterval(id); }, []); return <div className="countdown">{values.map((value, i) => <div key={i}><strong>{String(value).padStart(2, '0')}</strong><span>{(urdu ? ['دن', 'گھنٹے', 'منٹ', 'سیکنڈ'] : ['DAYS', 'HOURS', 'MINUTES', 'SECONDS'])[i]}</span></div>)}</div>; }
-function RsvpForm({ urdu }: { urdu: boolean }) {
-    const [name, setName] = useState(''); const [attendance, setAttendance] = useState<'yes' | 'no'>('yes'); const [note, setNote] = useState(''); const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle'); const [error, setError] = useState('');
-    async function submit(e: FormEvent) {
-        e.preventDefault();
-        if (!name.trim()) { setError(urdu ? 'براہ کرم اپنا نام درج کریں۔' : 'Please enter your name.'); return; }
-        setStatus('sending'); setError('');
-        try {
-            const res = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), attendance, dietary: note.trim() }) });
-            if (!res.ok) throw new Error('failed');
-            setStatus('done');
-        } catch { setStatus('idle'); setError(urdu ? 'جواب محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔' : 'Unable to save your response. Please try again.'); }
-    }
-    if (status === 'done') return <div className="success"><span>♥</span><h3>{urdu ? 'شکریہ!' : 'Thank You!'}</h3><p>{urdu ? 'آپ کا جواب موصول ہو گیا ہے۔' : 'Your response has been received.'}</p></div>;
-    return <form onSubmit={submit}>
-        <label htmlFor="rsvp-name">{urdu ? 'آپ کا نام' : 'Your Name'}</label>
-        <input id="rsvp-name" value={name} onChange={e => setName(e.target.value)} placeholder={urdu ? 'پورا نام لکھیں' : 'Full name'} maxLength={150} autoComplete="name" />
-        <label htmlFor="rsvp-attendance">{urdu ? 'کیا آپ تشریف لائیں گے؟' : 'Will you attend?'}</label>
-        <select id="rsvp-attendance" value={attendance} onChange={e => setAttendance(e.target.value as 'yes' | 'no')}>
-            <option value="yes">{urdu ? 'جی ہاں، ان شاء اللہ' : 'Yes, with pleasure'}</option>
-            <option value="no">{urdu ? 'معذرت، شرکت نہیں کر سکوں گا/گی' : 'Sadly, cannot make it'}</option>
-        </select>
-        <label htmlFor="rsvp-note">{urdu ? 'پیغام (اختیاری)' : 'Message (optional)'}</label>
-        <textarea id="rsvp-note" rows={3} value={note} onChange={e => setNote(e.target.value)} placeholder={urdu ? 'نیک تمنائیں…' : 'Your wishes…'} maxLength={1000} />
-        {error && <p className="form-error">{error}</p>}
-        <button className="gold-button" type="submit" disabled={status === 'sending'}>{status === 'sending' ? (urdu ? 'بھیجا جا رہا ہے…' : 'Sending…') : (urdu ? 'جواب بھیجیں' : 'Send RSVP')}</button>
-    </form>;
-}
-function ContactSection({ urdu }: { urdu: boolean }) {
-    return <Card title={urdu ? 'رابطہ و خیر مقدم' : 'Contact & RSVP'}>
-        <RsvpForm urdu={urdu} />
-        <div className="rsvp-contacts">
-            <p className="rsvp-label">{urdu ? 'برائے رابطہ و معلومات' : 'For Enquiries & RSVP'}</p>
-            {w.rsvpContacts.length > 0 && <div className="contact-buttons">
-                {w.rsvpContacts.map(c => <a key={c.phone} href={`tel:${c.phone.replace(/[^+\d]/g, '')}`} className="contact-btn">📞 {c.name}: {c.phone}</a>)}
-            </div>}
-            <p className="looking-forward">{urdu ? `منتظر: ${w.lookingForwardUrdu}` : `Looking Forward: ${w.lookingForward}`}</p>
-        </div>
-    </Card>;
-}
-
 export default function DarkInvitation() {
     const [started, setStarted] = useState(false);
     const [ready, setReady] = useState(false);
@@ -232,7 +192,7 @@ export default function DarkInvitation() {
                     <ScratchDate urdu={urdu} />
                     <section className="gallery-section" data-reveal><Ornament /><div className="gallery-frame"><button className="gallery-image" onClick={() => setLightbox(slide)} aria-label="Open wedding photograph">{photos.map((p, i) => <img src={p.src} alt={p.alt} key={i} className={i === slide ? 'active' : ''} loading="lazy" />)}</button><button className="gallery-prev" onClick={() => setSlide(i => (i + 3) % 4)} aria-label="Previous photo">‹</button><button className="gallery-next" onClick={() => setSlide(i => (i + 1) % 4)} aria-label="Next photo">›</button></div><div className="gallery-dots">{photos.map((_, i) => <button key={i} className={i === slide ? 'active' : ''} onClick={() => setSlide(i)} aria-label={`Photo ${i + 1}`} aria-pressed={i === slide} />)}</div></section>
                     <Card title={t('Counting Down to Forever', 'ہماری خوشیوں کے آغاز میں')}><Countdown urdu={urdu} /></Card>
-                    <Card title={t('Program Timeline', 'تقریبات کا پروگرام')}><div className="timeline">{w.timeline.map((event, i) => <div className="timeline-item" key={i}>{event.day && <p className="event-day">{event.day}</p>}<div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? 'آپ کی آمد اور دعاؤں کے منتظر' : event.note}</p></div></div></div>)}</div></Card>
+                    <Card title={t('Program Timeline', 'تقریبات کا پروگرام')}><div className="timeline">{w.timeline.map((event, i) => <div className="timeline-item" key={i}>{event.day && <p className="event-day">{event.day}</p>}<div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p></div></div></div>)}</div></Card>
                     <Card title={t('Venue & Location', 'مقامِ تقریب')}>
                         <Rose className="venue-rose" />
                         {w.venues.map((v, i) => (
@@ -245,12 +205,7 @@ export default function DarkInvitation() {
                             </div>
                         ))}
                     </Card>
-                    <Card title={t('Dress Code', 'لباس')}><div className="dress-grid"><div><span className="dress-icon">♧</span><h3>{t('Women', 'خواتین')}</h3><p>{t('Elegant Pakistani formal wear with full sleeves and a coordinating dupatta.', 'باوقار پاکستانی لباس، مکمل آستین اور دوپٹے کے ساتھ۔')}</p></div><div><span className="dress-icon">♧</span><h3>{t('Men', 'حضرات')}</h3><p>{t('Sherwani, waistcoat or traditional formal wear.', 'شیروانی، واسکٹ یا روایتی رسمی لباس۔')}</p></div></div></Card>
-                    {w.preEvents.length > 0 && <Card title={t('Pre-Wedding Events', 'شادی سے پہلے کی تقریبات')}><div className="timeline">{w.preEvents.map((event, i) => <div className="timeline-item" key={i}><p className="event-day">{event.day}</p><div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? 'اہلِ خانہ کی جانب سے دعوت' : event.note}</p></div></div></div>)}</div></Card>}
-                    <Card title={t('Transportation', 'آمد و رفت')}><p className="body-copy">{t(w.transportation, 'آمد و رفت کے انتظامات اور مقام کی تفصیل کے لیے میزبان خاندان سے رابطہ فرمائیں۔')}</p></Card>
-                    <Card title={t('Accommodation', 'قیام کا انتظام')}><p className="body-copy">{t(w.accommodation, 'دوسرے شہروں سے آنے والے مہمانوں کے قیام کے لیے ہمارے اہلِ خانہ آپ کی مدد کریں گے۔')}</p></Card>
-                    <Card title={t('Gifts', 'تحائف')}><p className="body-copy">{t(w.gifts, 'آپ کی محبت، دعائیں اور شرکت ہی ہمارے لیے سب سے قیمتی تحفہ ہیں۔')}</p></Card>
-                    <ContactSection urdu={urdu} />
+                    {w.preEvents.length > 0 && <Card title={t('Pre-Wedding Events', 'شادی سے پہلے کی تقریبات')}><div className="timeline">{w.preEvents.map((event, i) => <div className="timeline-item" key={i}><p className="event-day">{event.day}</p><div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p></div></div></div>)}</div></Card>}
                     <section className="closing" data-reveal>
                         <div className="monogram" aria-hidden="true"><span className="m-line" /><span className="m-diamond"><span>B·F</span></span><span className="m-line" /></div>
                         <Rose className="closing-rose left" /><Rose className="closing-rose right" /><Crown />

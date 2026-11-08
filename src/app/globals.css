@@ -154,9 +154,12 @@ h2{font-family:var(--display);font-size:30px;line-height:1.3;text-align:center;c
 
 /* ---------- timeline ---------- */
 .timeline{text-align:left;position:relative}
-.event-day{font-family:var(--display);color:var(--gold2);font-size:11px;letter-spacing:1px;line-height:1.7;text-align:center;border-bottom:1px solid #c9a96e38;padding-bottom:12px;margin:19px 0}
+.event-day{font-family:var(--display);color:#241708;font-size:17px;font-weight:600;letter-spacing:2px;line-height:1.4;text-align:center;border:1px solid #e6cc99;background:linear-gradient(135deg,#f6e2ae,#d9b76a 55%,#b8903f);padding:15px 10px 13px;margin:30px -8px 16px;border-radius:70px 70px 10px 10px;box-shadow:0 8px 24px #c9a96e38,inset 0 0 0 3px #fff6ec33;position:relative}
+.event-day::before,.event-day::after{content:'✦';position:absolute;top:50%;translate:0 -50%;color:#8a6420;font-size:13px}
+.event-day::before{left:16px}
+.event-day::after{right:16px}
 .event-row{display:grid;grid-template-columns:62px 22px 1fr;gap:9px;position:relative;padding:9px 0 24px}
-.event-row time{font-size:15px;line-height:26px;font-weight:600;color:var(--gold2)}
+.event-row time{font-size:19px;line-height:26px;font-weight:700;color:var(--gold2);text-shadow:0 0 12px #c9a96e55}
 .event-marker{font-size:22px;color:#d8ab63;position:relative;text-align:center}
 .event-marker::after{content:'';position:absolute;width:1px;background:#c9a96e59;top:28px;bottom:-26px;left:50%}
 .timeline-item:last-child .event-marker::after{display:none}
