@@ -1,0 +1,36 @@
+name: Extract v6 zip
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract zip flat to repo root
+        run: |
+          unzip -l bilal-fatima-dark.zip
+          mkdir -p /tmp/v6
+          unzip -o bilal-fatima-dark.zip -d /tmp/v6
+          TOP_COUNT=$(find /tmp/v6 -mindepth 1 -maxdepth 1 | wc -l)
+          if [ "$TOP_COUNT" = "1" ] && [ -d "$(find /tmp/v6 -mindepth 1 -maxdepth 1 -type d)" ]; then
+            TOP_DIR=$(find /tmp/v6 -mindepth 1 -maxdepth 1 -type d)
+            cp -a "$TOP_DIR"/. .
+          else
+            cp -a /tmp/v6/. .
+          fi
+          rm -rf /tmp/v6 bilal-fatima-dark.zip
+          ls -la
+      - name: Commit extracted files and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          rm -rf .github
+          git add -A
+          git status --short
+          git diff --cached --quiet || git commit -m "Move punctuality note below timeline, remove event descriptions"
+          git push
