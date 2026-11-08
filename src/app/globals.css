@@ -219,8 +219,8 @@ form>.gold-button{display:flex;width:100%;margin-top:22px;text-transform:none;fo
 .monogram{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px auto 4px}
 .monogram .m-line{width:56px;height:1px;background:linear-gradient(90deg,transparent,#c9a96e)}
 .monogram .m-line:last-child{background:linear-gradient(90deg,#c9a96e,transparent)}
-.monogram .m-diamond{width:64px;height:64px;border:1px solid #c9a96e88;rotate:45deg;display:flex;align-items:center;justify-content:center;background:#ffffff06}
-.monogram .m-diamond span{rotate:-45deg;font-family:var(--display);font-size:19px;color:var(--gold2);letter-spacing:1px}
+.monogram .m-diamond{width:56px;height:56px;border:2px solid #c9a96e;rotate:45deg;display:flex;align-items:center;justify-content:center;background:#ffffff08;box-shadow:0 0 18px #c9a96e33}
+.monogram .m-diamond span{rotate:-45deg;font-family:var(--display);font-size:22px;font-weight:600;color:var(--gold2);letter-spacing:1px}
 .closing p{font-family:var(--script);font-size:31px;line-height:1.4;margin:22px 0 14px;color:var(--rose)}
 .closing h2{font-family:var(--script);font-size:46px;background:linear-gradient(175deg,#f6e2ae,#c9a96e 60%,#a07c3d);-webkit-background-clip:text;background-clip:text;color:transparent}
 .closing-heart{font-size:22px;color:var(--gold)}
