@@ -50,7 +50,7 @@ export const wedding = {
   // Scratch-to-reveal heart
   dateText: "16 – 17 January 2027",
   day: "Saturday & Sunday",
-  time: "Mehndi 6 PM · Walima 1 PM",
+  time: "Mehndi 6 PM · Shalima 1 PM",
 
   // Punctuality note — Program Timeline section ke neeche
   punctuality: "Kindly arrive on time — your punctuality helps us begin the celebrations promptly and enjoy every moment together. ♥",
@@ -73,8 +73,8 @@ export const wedding = {
     {
       day: "Sunday, 17 January 2027",
       time: "1:00 PM",
-      title: "Walima",
-      urdu: "ولیمہ",
+      title: "Shalima",
+      urdu: "شالیمہ",
       note: "",
       noteUrdu: "",
     },
@@ -93,8 +93,8 @@ export const wedding = {
       mapUrl: "https://www.google.com/maps/search/?api=1&query=Canel+Home+Hall",
     },
     {
-      tag: "Walima",
-      tagUrdu: "ولیمہ",
+      tag: "Shalima",
+      tagUrdu: "شالیمہ",
       name: "Lubaba Marquee",
       nameUrdu: "لبابہ مارکی",
       address: "Sunday, 17 January 2027 · 1:00 PM onwards",
