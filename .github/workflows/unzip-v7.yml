@@ -1,0 +1,36 @@
+name: Extract v7 zip
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract zip flat to repo root
+        run: |
+          unzip -l bilal-fatima-dark.zip
+          mkdir -p /tmp/v7
+          unzip -o bilal-fatima-dark.zip -d /tmp/v7
+          TOP_COUNT=$(find /tmp/v7 -mindepth 1 -maxdepth 1 | wc -l)
+          if [ "$TOP_COUNT" = "1" ] && [ -d "$(find /tmp/v7 -mindepth 1 -maxdepth 1 -type d)" ]; then
+            TOP_DIR=$(find /tmp/v7 -mindepth 1 -maxdepth 1 -type d)
+            cp -a "$TOP_DIR"/. .
+          else
+            cp -a /tmp/v7/. .
+          fi
+          rm -rf /tmp/v7 bilal-fatima-dark.zip
+          ls -la
+      - name: Commit extracted files and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          rm -rf .github
+          git add -A
+          git status --short
+          git diff --cached --quiet || git commit -m "Punctuality line inside Walima event"
+          git push
