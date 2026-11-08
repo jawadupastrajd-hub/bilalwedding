@@ -1,0 +1,43 @@
+name: Extract uploaded archive
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+      - name: Extract archive into repo root
+        run: |
+          set -e
+          test -f bilal-fatima-dark.zip || { echo "archive not found"; exit 1; }
+          mkdir -p /tmp/extracted
+          unzip -o bilal-fatima-dark.zip -d /tmp/extracted
+          ENTRIES=$(find /tmp/extracted -mindepth 1 -maxdepth 1 | wc -l)
+          if [ "$ENTRIES" = "1" ] && [ -d "$(find /tmp/extracted -mindepth 1 -maxdepth 1)" ]; then
+            SRC=$(find /tmp/extracted -mindepth 1 -maxdepth 1)
+          else
+            SRC=/tmp/extracted
+          fi
+          echo "Copying contents of $SRC"
+          cp -a "$SRC"/. .
+          rm -f bilal-fatima-dark.zip
+          rm -f .github/workflows/extract.yml
+          git status --short
+          git add -A
+          git status --short
+      - name: Commit extracted files
+        run: |
+          git config user.name "jawadupastrajd-hub"
+          git config user.email "jawadupastrajd-hub@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update invitation: Aslam name, Mehndi 6PM, Walima 1PM, removed sections"
+          git push
