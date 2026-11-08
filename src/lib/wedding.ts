@@ -30,8 +30,8 @@ export interface RsvpContact {
 }
 
 export const wedding = {
-  groom: "Muhammad Bilal Aslam",
-  groomUrdu: "محمد بلال اسلم",
+  groom: "Bilal Aslam",
+  groomUrdu: "بلال اسلم",
   groomFamily: "",
   groomFamilyUrdu: "",
   bride: "Fatima Waheed",
@@ -52,6 +52,10 @@ export const wedding = {
   day: "Saturday & Sunday",
   time: "Mehndi 6 PM · Walima 1 PM",
 
+  // Punctuality line — timeline events ke neeche alag gold line me
+  punctuality: "Kindly arrive on time — your punctuality helps us begin the celebrations promptly and enjoy every moment together. ♥",
+  punctualityUrdu: "براہِ کرم وقت پر تشریف لائیں — آپ کی پابندیِ وقت سے تقریب بروقت شروع ہوگی اور ہم سب مل کر ہر لمحہ لطف اٹھا سکیں گے۔ ♥",
+
   // Countdown + Save-the-date target (pehli taqreeb — Mehndi)
   date: "2027-01-16T18:00:00+05:00",
   venue: "Canel Home Hall",
@@ -63,16 +67,16 @@ export const wedding = {
       time: "6:00 PM",
       title: "Mehndi",
       urdu: "مہندی",
-      note: "An evening of music, dance and vibrant celebrations at Canel Home Hall. Kindly arrive on time — your punctuality helps us begin the celebrations promptly and enjoy every moment together. ♥",
-      noteUrdu: "کینل ہوم ہال میں موسیقی، رقص اور رنگوں بھری شام۔ براہِ کرم وقت پر تشریف لائیں — آپ کی پابندیِ وقت سے تقریب بروقت شروع ہوگی اور ہم سب مل کر ہر لمحہ لطف اٹھا سکیں گے۔ ♥",
+      note: "An evening of music, dance and vibrant celebrations at Canel Home Hall.",
+      noteUrdu: "کینل ہوم ہال میں موسیقی، رقص اور رنگوں بھری شام۔",
     },
     {
       day: "Sunday, 17 January 2027",
       time: "1:00 PM",
       title: "Walima",
       urdu: "ولیمہ",
-      note: "The Walima reception at Lubaba Marquee. Kindly arrive on time — your punctuality helps us begin the celebrations promptly and enjoy every moment together. ♥",
-      noteUrdu: "لبابہ مارکی میں ولیمہ کی تقریب۔ براہِ کرم وقت پر تشریف لائیں — آپ کی پابندیِ وقت سے تقریب بروقت شروع ہوگی اور ہم سب مل کر ہر لمحہ لطف اٹھا سکیں گے۔ ♥",
+      note: "The Walima reception at Lubaba Marquee.",
+      noteUrdu: "لبابہ مارکی میں ولیمہ کی تقریب۔",
     },
   ] as TimelineEvent[],
 
@@ -115,6 +119,6 @@ export const wedding = {
     { name: "Fatima's Family", phone: "+92 300 0000000" },
   ] as RsvpContact[],
 
-  lookingForward: "Muhammad Bilal Aslam & Fatima Waheed",
-  lookingForwardUrdu: "محمد بلال اسلم اور فاطمہ وحید",
+  lookingForward: "Bilal Aslam & Fatima Waheed",
+  lookingForwardUrdu: "بلال اسلم اور فاطمہ وحید",
 };

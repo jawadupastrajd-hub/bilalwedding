@@ -69,7 +69,7 @@ function ScratchDate({ urdu }: { urdu: boolean }) {
     }, []);
     useEffect(() => { if (!revealed) return; setConfetti(true); const t = setTimeout(() => setConfetti(false), 7000); return () => clearTimeout(t); }, [revealed]);
     function scratch(e: PointerEvent<HTMLCanvasElement>) { if (!drawing.current || revealed) return; const el = canvas.current, ctx = el?.getContext('2d'); if (!el || !ctx) return; const rect = el.getBoundingClientRect(), point = { x: (e.clientX - rect.left) * 260 / rect.width, y: (e.clientY - rect.top) * 240 / rect.height }; ctx.lineWidth = 38; ctx.lineCap = 'round'; ctx.beginPath(); if (last.current) ctx.moveTo(last.current.x, last.current.y); else ctx.moveTo(point.x, point.y); ctx.lineTo(point.x, point.y); ctx.stroke(); last.current = point; strokes.current++; if (strokes.current % 6 === 0) { const pixels = ctx.getImageData(0, 0, el.width, el.height).data; let clear = 0, count = 0; for (let i = 3; i < pixels.length; i += 32) { count++; if (pixels[i] < 100) clear++; } if (clear / count > .4) setRevealed(true); } }
-    return <section className="scratch-section" data-reveal>{confetti && <ConfettiBurst />}<h2>{revealed ? (urdu ? 'ہماری نئی زندگی کا آغاز' : 'Our forever begins') : (urdu ? 'تاریخ جاننے کے لیے کھرچیں' : 'Scratch to Reveal')}</h2><Ornament /><svg width="0" height="0" aria-hidden="true"><defs><clipPath id="heart-clip" clipPathUnits="objectBoundingBox"><path d="M.5,.96C.5,.96 .06,.70 .06,.36C.06,.18 .20,.06 .32,.06C.42,.06 .48,.14 .5,.24C.52,.14 .58,.06 .68,.06C.80,.06 .94,.18 .94,.36C.94,.70 .5,.96 .5,.96Z" /></clipPath></defs></svg><div className={`scratch-heart ${revealed ? 'revealed' : ''}`}><div className="revealed-date"><em>{urdu ? 'آپ مدعو ہیں!' : "You’re Invited!"}</em><strong>{w.dateText}</strong><span>{w.day}</span><span>{w.time}</span><b>♥</b></div><canvas ref={canvas} aria-label="Scratch to reveal wedding date" onPointerDown={e => { drawing.current = true; last.current = null; e.currentTarget.setPointerCapture(e.pointerId); scratch(e); }} onPointerMove={scratch} onPointerUp={() => { drawing.current = false; last.current = null; }} onPointerCancel={() => { drawing.current = false; }} /></div><button className="reveal-keyboard" onClick={() => setRevealed(true)}>{revealed ? (urdu ? 'ہم آپ کے منتظر ہیں' : 'We look forward to seeing you') : (urdu ? 'یا تاریخ دیکھنے کے لیے دبائیں' : 'Or tap here to reveal')}</button><SaveDate urdu={urdu} /></section>;
+    return <section className="scratch-section" data-reveal>{confetti && <ConfettiBurst />}<h2>{revealed ? (urdu ? 'ہماری نئی زندگی کا آغاز' : 'Our forever begins') : (urdu ? 'تاریخ جاننے کے لیے کھرچیں' : 'Scratch to Reveal')}</h2><Ornament /><svg width="0" height="0" aria-hidden="true"><defs><clipPath id="heart-clip" clipPathUnits="objectBoundingBox"><path d="M.5,.96C.5,.96 .06,.70 .06,.36C.06,.18 .20,.06 .32,.06C.42,.06 .48,.14 .5,.24C.52,.14 .58,.06 .68,.06C.80,.06 .94,.18 .94,.36C.94,.70 .5,.96 .5,.96Z" /></clipPath></defs></svg><div className={`scratch-heart ${revealed ? 'revealed' : ''}`}><div className="revealed-date"><em>{urdu ? 'آپ مدعو ہیں!' : "You’re Invited!"}</em><strong>{w.dateText}</strong><span>{w.day}</span>{w.time.split('·').map((part, i) => <span key={i}>{part.trim()}</span>)}<b>♥</b></div><canvas ref={canvas} aria-label="Scratch to reveal wedding date" onPointerDown={e => { drawing.current = true; last.current = null; e.currentTarget.setPointerCapture(e.pointerId); scratch(e); }} onPointerMove={scratch} onPointerUp={() => { drawing.current = false; last.current = null; }} onPointerCancel={() => { drawing.current = false; }} /></div><button className="reveal-keyboard" onClick={() => setRevealed(true)}>{revealed ? (urdu ? 'ہم آپ کے منتظر ہیں' : 'We look forward to seeing you') : (urdu ? 'یا تاریخ دیکھنے کے لیے دبائیں' : 'Or tap here to reveal')}</button><SaveDate urdu={urdu} /></section>;
 }
 function SaveDate({ urdu }: { urdu: boolean }) {
     const [open, setOpen] = useState(false);
@@ -182,17 +182,16 @@ export default function DarkInvitation() {
             <div className="hero-shade" />
             <GoldDust active={true} />
             <div className="couple-heading"><span className="small-heart">♥</span><p className="hero-intro">{t(w.heroIntro, w.heroIntroUrdu)}</p><div className="heart-rule">— ♥ —</div><h1>{urdu ? w.groomUrdu : w.groom}{w.groomFamily && <small>{t(w.groomFamily, w.groomFamilyUrdu)}</small>}</h1><span className="amp">{urdu ? 'اور' : 'with'}</span><h1>{urdu ? w.brideUrdu : w.bride}{w.brideFamily && <small>{t(w.brideFamily, w.brideFamilyUrdu)}</small>}</h1></div>
-            {showNames && <a className="scroll-cue" href="#welcome">{t('SCROLL', 'مزید دیکھیں')}<span>⌄</span></a>}
+            {showNames && <a className="scroll-cue" href="#main">{t('SCROLL', 'مزید دیکھیں')}<span>⌄</span></a>}
         </section>
         {showNames && (
             <>
                 <Marquee />
-                <section className="welcome" id="welcome"><div className="heart-rule">— ♥ —</div><p>{urdu ? w.welcomeUrdu : w.welcome}</p><div className="heart-rule">— ♥ —</div></section>
-                <main dir={urdu ? 'rtl' : 'ltr'}>
+                <main id="main" dir={urdu ? 'rtl' : 'ltr'}>
                     <ScratchDate urdu={urdu} />
                     <section className="gallery-section" data-reveal><Ornament /><div className="gallery-frame"><button className="gallery-image" onClick={() => setLightbox(slide)} aria-label="Open wedding photograph">{photos.map((p, i) => <img src={p.src} alt={p.alt} key={i} className={i === slide ? 'active' : ''} loading="lazy" />)}</button><button className="gallery-prev" onClick={() => setSlide(i => (i + 3) % 4)} aria-label="Previous photo">‹</button><button className="gallery-next" onClick={() => setSlide(i => (i + 1) % 4)} aria-label="Next photo">›</button></div><div className="gallery-dots">{photos.map((_, i) => <button key={i} className={i === slide ? 'active' : ''} onClick={() => setSlide(i)} aria-label={`Photo ${i + 1}`} aria-pressed={i === slide} />)}</div></section>
                     <Card title={t('Counting Down to Forever', 'ہماری خوشیوں کے آغاز میں')}><Countdown urdu={urdu} /></Card>
-                    <Card title={t('Program Timeline', 'تقریبات کا پروگرام')}><div className="timeline">{w.timeline.map((event, i) => <div className="timeline-item" key={i}>{event.day && <p className="event-day">{event.day}</p>}<div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p></div></div></div>)}</div></Card>
+                    <Card title={t('Program Timeline', 'تقریبات کا پروگرام')}><div className="timeline">{w.timeline.map((event, i) => <div className="timeline-item" key={i}>{event.day && <p className="event-day">{event.day}</p>}<div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p><p className="time-note">{urdu ? w.punctualityUrdu : w.punctuality}</p></div></div></div>)}</div></Card>
                     <Card title={t('Venue & Location', 'مقامِ تقریب')}>
                         <Rose className="venue-rose" />
                         {w.venues.map((v, i) => (
@@ -205,7 +204,7 @@ export default function DarkInvitation() {
                             </div>
                         ))}
                     </Card>
-                    {w.preEvents.length > 0 && <Card title={t('Pre-Wedding Events', 'شادی سے پہلے کی تقریبات')}><div className="timeline">{w.preEvents.map((event, i) => <div className="timeline-item" key={i}><p className="event-day">{event.day}</p><div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p></div></div></div>)}</div></Card>}
+                    {w.preEvents.length > 0 && <Card title={t('Pre-Wedding Events', 'شادی سے پہلے کی تقریبات')}><div className="timeline">{w.preEvents.map((event, i) => <div className="timeline-item" key={i}><p className="event-day">{event.day}</p><div className="event-row"><time>{event.time}</time><span className="event-marker">✧</span><div><h3>{urdu ? event.urdu : event.title}</h3><p>{urdu ? event.noteUrdu : event.note}</p><p className="time-note">{urdu ? w.punctualityUrdu : w.punctuality}</p></div></div></div>)}</div></Card>}
                     <section className="closing" data-reveal>
                         <div className="monogram" aria-hidden="true"><span className="m-line" /><span className="m-diamond"><span>B·F</span></span><span className="m-line" /></div>
                         <Rose className="closing-rose left" /><Rose className="closing-rose right" /><Crown />
@@ -213,7 +212,6 @@ export default function DarkInvitation() {
                         <h2>{urdu ? `${w.groomUrdu} اور ${w.brideUrdu}` : `${w.groom} & ${w.bride}`}</h2>
                         <Ornament /><span className="closing-heart">♥</span>
                     </section>
-                    <footer><span>{urdu ? `${w.groomUrdu} اور ${w.brideUrdu}` : `${w.groom} & ${w.bride}`}</span><p>{urdu ? 'شادی کا دعوت نامہ' : 'Wedding Invitation'}</p></footer>
                 </main>
             </>
         )}
