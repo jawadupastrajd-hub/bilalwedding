@@ -1,0 +1,29 @@
+name: Unzip v15
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract zip flat to repo root
+        run: |
+          set -e
+          unzip -o bilal-fatima-dark.zip
+          rm -f bilal-fatima-dark.zip
+          rm -rf __MACOSX
+          if [ -d bilal-fatima-dark ]; then
+            echo "Flattening top-level folder: bilal-fatima-dark/"
+            cp -a bilal-fatima-dark/. ./
+            rm -rf bilal-fatima-dark
+          fi
+          ls -la
+          rm -rf .github
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status --short
+          git commit -m "Scratch reveal text in Calibri font" || echo "Nothing to commit"
+          git push
