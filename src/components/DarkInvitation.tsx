@@ -209,7 +209,7 @@ export default function DarkInvitation() {
                         <div className="monogram" aria-hidden="true"><span className="m-line" /><span className="m-diamond"><span>B·F</span></span><span className="m-line" /></div>
                         <Rose className="closing-rose left" /><Rose className="closing-rose right" /><Crown />
                         <p>{t("We can’t wait to celebrate with you!", 'آپ کی آمد کے منتظر!')}</p>
-                        <h2>{urdu ? `${w.groomUrdu} اور ${w.brideUrdu}` : `${w.groom} & ${w.bride}`}</h2>
+                        <h2>{urdu ? (<>{w.groomUrdu}<br />اور {w.brideUrdu}</>) : (<>{w.groom}<br />& {w.bride}</>)}</h2>
                         <Ornament /><span className="closing-heart">♥</span>
                     </section>
                 </main>
