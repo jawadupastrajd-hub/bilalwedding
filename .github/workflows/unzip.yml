@@ -14,14 +14,11 @@ jobs:
           unzip -o bilal-fatima-dark.zip
           rm -f bilal-fatima-dark.zip
           rm -rf __MACOSX
-          for d in */; do
-            if [ -f "${d}package.json" ]; then
-              echo "Flattening top-level folder: $d"
-              shopt -s dotglob nullglob
-              mv "${d}"* ./
-              rmdir "$d" || true
-            fi
-          done
+          if [ -d bilal-fatima-dark ]; then
+            echo "Flattening top-level folder: bilal-fatima-dark/"
+            cp -a bilal-fatima-dark/. ./
+            rm -rf bilal-fatima-dark
+          fi
           ls -la
           rm -rf .github
           git config user.name "github-actions[bot]"
